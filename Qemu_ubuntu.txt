@@ -1,0 +1,40 @@
+Building Qemu in Ubuntu-18.04
+Build qemu in ubuntu-18.04
+
+
+
+##Install make
+
+sudo apt install make
+
+##Install Ninja-1.8.2
+
+sudo apt install ninja-build
+
+##Install qemu dependencies same as in video lecture
+
+sudo apt-get install libsdl2-dev libpixman-1-dev flex bison
+
+##Download qemu
+
+git clone https://github.com/qemu/qemu.git
+
+## Build qemu
+
+cd qemu
+
+mkdir build
+
+mkdir sysroot
+
+cd build
+
+../configure --target-list=arm-softmmu,arm-linux-user --disable-vnc --enable-sdl --prefix=$PWD/../sysroot
+
+make
+
+make install
+
+##Run qemu with network support
+
+sudo ./qemu/sysroot/bin/qemu-system-arm -kernel ./kernel-qemu-4.4.36 -initrd rootfs.cpio -append "root=/dev/ram rdinit=/sbin/init" -cpu arm1176 -m 256 -M versatilepb -no-reboot -serial stdio -net nic \-net tap,ifname=vnet0,script=no,downscript=no
